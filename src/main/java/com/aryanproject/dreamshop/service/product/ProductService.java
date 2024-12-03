@@ -8,6 +8,7 @@ import com.aryanproject.dreamshop.repository.ProductRepository;
 import com.aryanproject.dreamshop.request.AddProductRequest;
 import com.aryanproject.dreamshop.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,16 +45,6 @@ public class ProductService implements ProductServiceInterface{
     }
 
     @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product not found"));
-    }
-
-    @Override
-    public void deleteProductById(Long id) {
-        productRepository.findById(id).ifPresentOrElse(productRepository::delete, ()-> new ProductNotFoundException("Product not found"));
-    }
-
-    @Override
     public Product updateProduct(ProductUpdateRequest request, Long productId) {
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct, request))
@@ -71,6 +62,16 @@ public class ProductService implements ProductServiceInterface{
         Category category = categoryRepository.findByName(request.getCategory().getName());
         request.setCategory(category);
         return existingProduct;
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("Product not found"));
+    }
+
+    @Override
+    public void deleteProductById(Long id) {
+        productRepository.findById(id).ifPresentOrElse(productRepository::delete, ()-> new ProductNotFoundException("Product not found"));
     }
 
     @Override
