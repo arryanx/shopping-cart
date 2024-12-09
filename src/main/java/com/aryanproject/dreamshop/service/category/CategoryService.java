@@ -44,7 +44,7 @@ public class CategoryService implements CategoryServiceInterface{
     }
 
     @Override
-    public Category addcategory(Category category) {
+    public Category addCategory(Category category) {
         return Optional.ofNullable(category).filter(c -> !categoryRepository.existsByName(c.getName()))
                 .map(categoryRepository::save)
                 .orElseThrow(() -> new AlreadyExistsException(category.getName()+ "already exists"));

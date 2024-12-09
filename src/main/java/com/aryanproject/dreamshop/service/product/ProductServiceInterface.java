@@ -1,5 +1,6 @@
 package com.aryanproject.dreamshop.service.product;
 
+import com.aryanproject.dreamshop.dto.ProductDto;
 import com.aryanproject.dreamshop.model.Product;
 import com.aryanproject.dreamshop.request.AddProductRequest;
 import com.aryanproject.dreamshop.request.ProductUpdateRequest;
@@ -18,4 +19,8 @@ public interface ProductServiceInterface {
     List<Product>getProductsByName(String name);
     List<Product>getProductsByBrandAndName(String brand, String name);
     Long countProductsByBrandAndName(String brand, String name);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    ProductDto convertToDto(Product product);
 }

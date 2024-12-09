@@ -9,6 +9,6 @@ public interface CategoryServiceInterface {
     Category getCategoryByName(String name);
     List<Category> getAllCategory();
     Category updateCategory(Category category, Long id);
-    Category addcategory(Category category);
+    Category addCategory(Category category);
     void deleteCategoryById(Long id);
 }

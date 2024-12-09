@@ -5,7 +5,6 @@ import com.aryanproject.dreamshop.exceptions.ResourceNotFoundException;
 import com.aryanproject.dreamshop.model.Image;
 import com.aryanproject.dreamshop.response.ApiResponse;
 import com.aryanproject.dreamshop.service.image.ImageServiceInterface;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
