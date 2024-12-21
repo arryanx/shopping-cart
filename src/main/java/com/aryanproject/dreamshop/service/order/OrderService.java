@@ -10,6 +10,7 @@ import com.aryanproject.dreamshop.service.cart.CartServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class OrderService implements OrderServiceInterface{
     private final CartServiceInterface cartService;
     private final ModelMapper modelMapper;
 
+    @Transactional
     @Override
     public Order placeOrder(Long userId) {
         Cart cart= cartService.getCartByUserId(userId);
@@ -83,6 +85,7 @@ public class OrderService implements OrderServiceInterface{
         return orders.stream().map(this::convertToDto).toList();
     }
 
+    @Override
     public OrderDto convertToDto(Order order){
         return modelMapper.map(order,OrderDto.class);
     }

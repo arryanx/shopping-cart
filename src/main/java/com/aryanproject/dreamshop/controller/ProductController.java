@@ -1,6 +1,7 @@
 package com.aryanproject.dreamshop.controller;
 
 import com.aryanproject.dreamshop.dto.ProductDto;
+import com.aryanproject.dreamshop.exceptions.AlreadyExistsException;
 import com.aryanproject.dreamshop.exceptions.ResourceNotFoundException;
 import com.aryanproject.dreamshop.model.Product;
 import com.aryanproject.dreamshop.request.AddProductRequest;
@@ -9,12 +10,12 @@ import com.aryanproject.dreamshop.response.ApiResponse;
 import com.aryanproject.dreamshop.service.product.ProductServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
@@ -41,17 +42,19 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product){
         try {
             Product theProduct= productService.addProduct(product);
             ProductDto productDto= productService.convertToDto(theProduct);
             return ResponseEntity.ok(new ApiResponse("Add product success",productDto));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(),null));
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/product/{productId}/update")
     public  ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable Long productId) {
         try {
@@ -63,6 +66,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {

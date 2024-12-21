@@ -1,11 +1,15 @@
 package com.aryanproject.dreamshop.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class CreateUserRequest {
-    private String firstName;
-    private String lastName;
+public class LoginRequest {
+
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
+
 }

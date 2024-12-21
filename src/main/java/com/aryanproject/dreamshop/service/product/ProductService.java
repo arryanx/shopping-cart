@@ -3,6 +3,7 @@ package com.aryanproject.dreamshop.service.product;
 import com.aryanproject.dreamshop.dto.ImageDto;
 import com.aryanproject.dreamshop.dto.ProductDto;
 import com.aryanproject.dreamshop.exceptions.ProductNotFoundException;
+import com.aryanproject.dreamshop.exceptions.ResourceNotFoundException;
 import com.aryanproject.dreamshop.model.Category;
 import com.aryanproject.dreamshop.model.Image;
 import com.aryanproject.dreamshop.model.Product;
@@ -29,6 +30,10 @@ public class ProductService implements ProductServiceInterface{
 
     @Override
     public Product addProduct(AddProductRequest request) {
+
+        if (productExists(request.getName(),request.getBrand())){
+            throw new ResourceNotFoundException("Product already exists, you may update instead");
+        }
         Category category= Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory= new Category(request.getCategory().getName());
@@ -36,6 +41,10 @@ public class ProductService implements ProductServiceInterface{
                 });
         request.setCategory(category);
         return productRepository.save(createproduct(request,category));
+    }
+
+    private boolean productExists(String name, String brand){
+        return productRepository.existsByNameAndBrand(name,brand);
     }
 
     private Product createproduct(AddProductRequest request, Category category){
